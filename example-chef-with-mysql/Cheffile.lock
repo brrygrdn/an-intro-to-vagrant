@@ -1,0 +1,25 @@
+SITE
+  remote: http://community.opscode.com/api/v1
+  specs:
+    apt (2.1.1)
+    build-essential (1.4.2)
+    chef_gem (0.1.0)
+    mysql (3.0.4)
+      build-essential (> 1.1.0)
+      openssl (>= 0.0.0)
+    openssl (1.1.0)
+
+GIT
+  remote: https://github.com/fnichol/chef-rvm
+  ref: master
+  sha: 7038fb8c518d0d7785767de215b1ae463f237973
+  specs:
+    rvm (0.9.1)
+      chef_gem (>= 0.0.0)
+
+DEPENDENCIES
+  apt (>= 0)
+  build-essential (>= 0)
+  mysql (>= 0)
+  rvm (>= 0)
+

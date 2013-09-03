@@ -1,0 +1,49 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "precise64"
+  config.vm.box_url = 'http://files.vagrantup.com/precise64.box'
+  config.vm.network :private_network, ip: "192.168.128.5"
+
+  config.vm.provision :chef_solo do |chef|
+    # This path will be expanded relative to the project directory
+    chef.cookbooks_path = "cookbooks"
+
+    chef.add_recipe 'apt'
+    chef.add_recipe 'build-essential'
+
+    chef.add_recipe 'rvm::vagrant'
+    chef.add_recipe 'rvm::system'
+
+    chef.add_recipe 'mysql::server'
+
+    chef.json = {
+      rvm: {
+        rubies:       ['2.0.0'],
+        default_ruby: '2.0.0',
+        global_gems:  [
+          { name: 'bundler'},
+          { name: 'rake'}
+        ],
+        vagrant: {
+          system_chef_solo: '/opt/vagrant_ruby/bin/chef-solo'
+        }
+      },
+      mysql: {
+        version:                '5.5.29',
+        server_root_password:   'password',
+        server_repl_password:   'password',
+        server_debian_password: 'password',
+        allow_remote_root:      true,
+        remove_test_database:   true
+      }
+    }
+  end
+
+  config.vm.provision :shell,
+    :inline => "cd /vagrant && bundle install"
+end
