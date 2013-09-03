@@ -1,6 +1,623 @@
-<html>
-	<head></head>
-	<body>
-		<h1>Testing Publishing</h1>
-	</body>
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Vagrant</title>
+
+        <meta name="description" content="A short guide to getting started with Vagrant to build and distribute (better) development environments">
+        <meta name="author" content="Barry Gordon">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="css/reveal.min.css">
+        <link rel="stylesheet" href="css/theme/serif.css" id="theme">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+            document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <div class="reveal">
+
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
+
+                <section>
+                    <h1>Vagrant</h1>
+                    <h3>Shipping Your Dev Box</h3>
+                    <p>By <a href='http://www.barrygordon.co.uk'>Barry Gordon</a> ( <a href='https://twitter.com/brrygrdn'>@brrygrdn</a> )</p>
+                </section>
+
+                <section>
+                    <h2>About me</h2>
+                    <h3><strike>Professional Vagrant</strike></h3>
+                    <h3>Contract Developer</h3>
+                    <img src='img/hulk-ending.jpg' />
+                </section>
+
+                <section>
+                    <section data-transition='linear'>
+                        <h2>The Problem with Pets</h2>
+                        <img src='img/pet-gotchas.jpg' />
+                    </section>
+
+                    <section data-transition='linear'>
+                        <h2>The Problem with Pets</h2>
+                        <ul>
+                            <li class='fragment'>I think he's awesome</li>
+                            <li class='fragment'>You think he's annoying</li>
+                            <li class='fragment'>I will tolerate his quirks</li>
+                            <li class='fragment'>You won't</li>
+                            <li class='fragment'>I will rush to treat health problems</li>
+                            <li class='fragment'>You're only sympathetic because you probably have a pet too</li>
+                            <li class='fragment'>Replacing him is A Big Deal as he's unique</li>
+                        </ul>
+                    </section>
+
+                    <section data-transition='linear'>
+                        <h2>The Problem with Pets</h2>
+                        <p>Basically, they're subjective and precious</p>
+                        <img src='img/emacs-user.jpg' />
+                    </section>
+                </section>
+
+                <section>
+                    <section data-transition='linear'>
+                        <h2>Of Clouds and Cattle</h2>
+                        <img src='img/cloudy-cattle.jpg' />
+                    </section>
+
+                    <section data-transition='linear'>
+                        <h2>Of Clouds and Cattle</h2>
+                        <ul>
+                            <li class='fragment'>They are many</li>
+                            <li class='fragment'>They each fulfill a single purpose</li>
+                            <li class='fragment'>They are homogenous</li>
+                            <li class='fragment'>If they get ill, we replace them</li>
+                            <li class='fragment'>They're easily reproduced</li>
+                        </ul>
+                    </section>
+
+                    <section data-transition='linear'>
+                        <h2>Of Clouds and Cattle</h2>
+                        <p>Virtualisation is ubiqious in production</p>
+                        <img style='border: none; box-shadow: none;' src='img/aws-logo.png' />
+                        <img style='border: none; box-shadow: none;' src='img/heroku-logo.png' /> <br />
+                        <img style='border: none; box-shadow: none;' src='img/engineyard-logo.png' />
+                    </section>
+                </section>
+
+                <section>
+
+                    <section data-transition='linear'>
+                        <h3>The Precarious Life of a Dev Box</h3>
+                        <img src='img/pet-bacon.png' />
+                    </section>
+
+                    <section data-transition='linear'>
+                        <h3>The Precarious Life of a Dev Box</h3>
+                        <h4>Its a pet because it supports your workflow and provides your digital identity</h4>
+                        <h4>Its cattle because it houses working copies of one or more projects which must be reproducible</h4>
+                    </section>
+
+                    <section data-transition='linear'>
+                        <h3>The Precarious Life of a Dev Box</h3>
+                        <p>As Ruby developers, we have it pretty good:</p>
+                        <ul>
+                            <li class='fragment'>We like to use Macs</li>
+                            <li class='fragment'>We have good package managers</li>
+                            <li class='fragment'>RVM and rubyenv allow us to pin Ruby versions per project</li>
+                            <li class='fragment'>Bundler and RVM gemsets allow us to silo gem versions per project</li>
+                        </ul>
+                        <p class='fragment'>But...</p>
+                        <ul>
+                            <li class='fragment'>Windows happens</li>
+                            <li class='fragment'>Micromanaging package versions is awkward</li>
+                            <li class='fragment'>When you consider testing tools and native build dependancies we can have quiet a lot of installs</li>
+                        </ul>
+                        <br /><br />
+                        <h4 class='fragment'>Also, other toolchains don't have it so good</h4>
+                    </section>
+
+                </section>
+
+                <section>
+
+                    <section data-transition='linear'>
+                        <h2><img style='border: none; box-shadow: none;' src='img/vagrant-logo.png' /></h2>
+                        <blockquote cite="http://www.vagrantup.com/about.html">
+                            Vagrant lowers development environment setup time, increases development/production parity, and makes the &ldquo;works on my machine&rdquo; excuse a relic of the past.
+                        </blockquote>
+                    </section>
+
+                    <section data-transition='linear'>
+                        <h2>Getting Started</h2>
+                        <ul>
+                            <li>Setting up:
+                                <ul>
+                                    <li>Install VirtualBox</li>
+                                    <li>Install the latest version of Vagrant <a href='http://downloads.vagrantup.com'>http://downloads.vagrantup.com</a></li>
+                                </ul>
+                            </li>
+                            <li class='fragment'>Boot your first VM:
+                                <pre><code data-trim class='bash'>
+$ vagrant init precise32 http://files.vagrantup.com/precise32.box
+$ vagrant up
+                                </code></pre>
+                            </li>
+                            <li class='fragment'>Connecting to your instance:
+                                <pre><code data-trim class='bash'>
+$ vagrant ssh
+Welcome to your Vagrant-built virtual machine.
+vagrant@precise32:/vagrant$
+                                </code></pre>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <section data-transition='linear'>
+                        <h3>Getting Started: Lifecycle</h3>
+                        <pre><code data-trim class='bash'>
+$ vagrant suspend
+[default] Saving VM state and suspending execution...
+                        </code></pre>
+                        <pre class='fragment'><code data-trim class='bash'>
+$ vagrant resume
+[default] Resuming suspended VM...
+[default] Booting VM...
+[default] Waiting for VM to boot. This can take a few minutes.
+[default] VM booted and ready for use!
+                        </code></pre>
+                        <pre class='fragment'><code data-trim class='bash'>
+$ vagrant destroy
+Are you sure you want to destroy the 'default' VM? [y/N] y
+[default] Forcing shutdown of VM...
+[default] Destroying VM and associated drives...
+                        </code></pre>
+                        <pre class='fragment'><code data-trim class='bash'>
+$ vagrant up
+Bringing machine 'default' up with 'virtualbox' provider...
+[default] Importing base box 'precise32'...
+                        </code></pre>
+
+                        <p class='fragment'>Rebuilding is a lot faster because of Boxes</p>
+                    </section>
+
+                    <section data-transition='linear'>
+                        <h3>Getting Started: Boxes</h3>
+                        <p>What boxes are installed?</p>
+                        <pre><code data-trim class='bash'>
+$ vagrant box list
+precise32 (virtualbox)
+                        </code></pre>
+                        <p class='fragment'>Let's install another</p>
+                        <pre class='fragment'><code data-trim class='bash'>
+$ vagrant box add precise64 http://files.vagrantup.com/precise64.box
+Downloading or copying the box...
+Successfully added box 'precise64' with provider 'virtualbox'!
+
+$ vagrant box list
+precise32 (virtualbox)
+precise64 (virtualbox)
+                        </code></pre>
+                        <p class='fragment'>Now we can use either box in our Vagrantfiles</p>
+                    </section>
+
+                    <section data-transition='linear'>
+                        <h3>Getting Started: Vagrantfile</h3>
+                        <p>A Vagrantfile is created via the init command</p>
+                        <pre><code data-trim class='bash'>
+$ vagrant init precise64
+$ vi Vagrantfile
+                        </code></pre>
+                        <p class='fragment'>Generated file, minus comments</p>
+                        <pre class='fragment'><code data-trim class='ruby'>
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "precise64"
+end
+                        </code></pre>
+                        <p class='fragment'>Now we can start to provision our development machines</p>
+                    </section>
+
+                </section>
+
+                <section>
+
+                    <section data-transition='linear'>
+                        <h3>Example: A Simple Apache Server</h3>
+                        <p class='fragment'>Vagrantfile</p>
+                        <pre class='fragment'><code data-trim class='ruby'>
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "precise64"
+  config.vm.box_url = 'http://files.vagrantup.com/precise64.box'
+  config.vm.network :forwarded_port, host: 8080, guest: 80
+  config.vm.provision :shell, :path => "bootstrap.sh"
+end
+                        </code></pre>
+                        <p class='fragment'>bootstrap</p>
+                        <pre class='fragment'><code data-trim class='bash'>
+#!/usr/bin/env bash
+
+apt-get update
+apt-get install -y apache2
+rm -rf /var/www
+ln -fs /vagrant /var/www
+
+                        </code></pre>
+                        <p class='fragment'>index.html</p>
+                        <pre class='fragment'><code data-trim class='html'>
+<h1>Hello from the VM</h1>
+                        </code></pre>
+                    </section>
+
+                    <section data-transition='linear'>
+                        <h3>Example: A Simple Apache Server</h3>
+                        <pre><code data-trim class='bash'>
+$ vagrant up
+                        </code></pre>
+                        <p class='fragment'>Visit http://localhost:8080</p>
+                        <img class='fragment' src='img/hello-world.png' />
+                    </section>
+
+                </section>
+
+                <section>
+
+                    <section>
+                        <h3>Example: Multiple Hosts</h3>
+
+                        <p class='fragment'>Vagrantfile</p>
+                        <pre class='fragment'><code data-trim class='ruby'>
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "precise64"
+  config.vm.box_url = 'http://files.vagrantup.com/precise64.box'
+  config.vm.provision :shell, :path => "bootstrap.sh"
+
+  config.vm.define :outer do |web|
+    config.vm.network :private_network, ip: "192.168.128.5"
+  end
+
+  config.vm.define :inner do |db|
+    config.vm.network :private_network, ip: "192.168.128.10"
+  end
+end
+                        </code></pre>
+                        <p class='fragment'>index.html</p>
+                        <pre class='fragment'><code data-trim class='html'>
+<h1>Hello from the Outer VM</h1>
+<iframe width='100%' src="http://192.168.128.10/index-2.html"></iframe>
+                        </code></pre>
+                        <p class='fragment'>index-2.html</p>
+                        <pre class='fragment'><code data-trim class='html'>
+<h1>Hello from the Inner VM</h1>
+                        </code></pre>
+                    </section>
+
+                    <section data-transition='linear'>
+                        <h3>Example: Multiple Hosts</h3>
+                        <pre><code data-trim class='bash'>
+$ vagrant up
+                        </code></pre>
+                        <p> or </p>
+                        <pre><code data-trim class='bash'>
+$ vagrant up outer
+$ vagrant up inner
+                        </code></pre>
+                        <p class='fragment'>Visit http://192.168.128.5/</p>
+                        <img class='fragment' src='img/multi-hello-world.png' />
+                    </section>
+
+                    <section>
+                        <h2>Development = Production</h2>
+                        <img src='img/hr-architecture.jpg' />
+                    </section>
+
+                </section>
+
+                <section>
+
+                    <section data-transition='linear'>
+                        <h3>Example: Provisioning with Chef</h3>
+                        <p>Why should you use Chef?</p>
+                        <ul>
+                            <li class='fragment'>Its a mature provisioning tool you may already use in production</li>
+                            <li class='fragment'>There are lots of cookbooks already available for most common packages</li>
+                            <li class='fragment'>Its a lot more maintainable than a big ball of shell script</li>
+                            <li class='fragment'>You can also use Puppet if you are more familiar with it</li>
+                        </ul>
+                        </br></br>
+                        <h4 class='fragment'>To use Chef, we need Librarian...</h4>
+                    </section>
+
+                    <section data-transition='linear'>
+                        <h3>Example: Provisioning with Chef</h3>
+                        <h4>( Actually, its optional but I recommend it. )</h4>
+                        <pre class='fragment'><code data-trim class='bash'>
+$ gem install librarian-chef
+$ librarian-chef init
+      create  Cheffile
+                        </code></pre>
+                        <p class='fragment'>The Cheffile</p>
+                        <pre class='fragment'><code data-trim class='ruby'>
+#!/usr/bin/env ruby
+#^syntax detection
+
+site 'http://community.opscode.com/api/v1'
+
+cookbook 'apt'
+cookbook 'build-essential'
+
+cookbook 'rvm',
+  :git => 'https://github.com/fnichol/chef-rvm'
+                        </code></pre>
+
+                        <pre class='fragment'><code data-trim class='shell'>
+$ librarian-chef install
+Installing apt (2.1.1)
+Installing build-essential (1.4.2)
+Installing chef_gem (0.1.0)
+Installing rvm (0.9.1)
+                        </code></pre>
+
+                        <p class='fragment'>Remember to add 'cookbooks/'' to .gitignore</p>
+                        <h4 class='fragment'>Note: You should probably look at berkshelf instead</h4>
+
+                    </section>
+
+                    <section>
+                        <h3>Example: Provisioning with Chef</h3>
+                        <p>Sinatra Hello World</p>
+                        <pre><code data-trim  class='ruby'>
+# Gemfile
+source "https://rubygems.org"
+
+gem "sinatra"
+                        </code></pre>
+                        <pre><code data-trim  class='ruby'>
+# app.rb
+require 'sinatra'
+
+get '/' do
+  "Hello World!"
+end
+                        </code></pre>
+                        <pre><code data-trim class='ruby'>
+# config.ru
+require './app'
+run Sinatra::Application
+                        </code></pre>
+                    </section>
+
+                     <section data-transition='linear'>
+                        <h3>Example: Provisioning with Chef</h3>
+                        <p>The Vagrantfile</p>
+                        <pre class='fragment'><code class='ruby'>
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "precise64"
+  config.vm.box_url = 'http://files.vagrantup.com/precise64.box'
+  config.vm.network :private_network, ip: "192.168.128.5"
+
+  config.vm.provision :chef_solo do |chef|
+    # This path will be expanded relative to the project directory
+    chef.cookbooks_path = "cookbooks"
+
+    chef.add_recipe 'apt'
+    chef.add_recipe 'build-essential'
+
+    chef.add_recipe 'rvm::vagrant'
+    chef.add_recipe 'rvm::system'
+
+    chef.json = {
+      rvm: {
+        rubies:       ['2.0.0'],
+        default_ruby: '2.0.0',
+        global_gems:  [
+          { name: 'bundler'},
+          { name: 'rake'}
+        ],
+        vagrant: {
+          system_chef_solo: '/opt/vagrant_ruby/bin/chef-solo'
+        }
+      }
+    }
+  end
+
+  config.vm.provision :shell,
+    :inline => "cd /vagrant && bundle install"
+end
+
+
+
+
+                        </code></pre>
+                    </section>
+
+                    <section data-transition='linear'>
+                        <h3>Example: Provisioning with Chef</h3>
+                        <pre><code data-trim class='bash'>
+$ vagrant up
+$ vagrant ssh
+vagrant@precise64:/vagrant$ cd /vagrant
+vagrant@precise64:/vagrant$ rackup
+                        </code></pre>
+
+                        <p class='fragment'>Visit http://192.168.128.5:9292/</p>
+                        <img class='fragment' src='img/sinatra-hello-world.png' />
+                    </section>
+
+                    <section data-transition='linear'>
+                        <h3>Example: Provisioning with Chef</h3>
+                        <h4>Let's add MySQL</h4>
+                        <pre class='fragment'><code data-trim class='ruby'>
+# Cheffile
++ cookbook 'mysql'
+
+# Vagrantfile
+
+  config.vm.provision :chef_solo do |chef|
++   chef.add_recipe 'mysql::server'
+    ...
+    chef.json = {
++      mysql: {
++       version:                '5.5.29',
++       server_root_password:   'password',
++       server_repl_password:   'password',
++       server_debian_password: 'password',
++       allow_remote_root:      true,
++       remove_test_database:   true
++     }
+
+                        </code></pre>
+                        <p class='fragment'>We don't need to rebuild</p>
+                        <pre class='fragment'><code data-trim class='ruby'>
+$ vagrant provision
+                        </code></pre>
+                        <p class='fragment'>We can focus one provisioning block</p>
+                        <pre class='fragment'><code data-trim class='ruby'>
+$ vagrant provision --provision-with chef_solo
+                        </code></pre>
+                    </section>
+
+                </section>
+
+                <section>
+
+                    <section data-transition='linear'>
+                        <h2>Packaging a Box</h2>
+                        <ul>
+                            <li class='fragment'>Provisioning times will inevitably creep up</li>
+                            <li class='fragment'>Every Vagrant VM begins life with a .box file</li>
+                            <li class='fragment'>It's really easy to turn your VM into a new .box:</li>
+                        </ul>
+                        <pre class='fragment'><code data-trim class='bash'>
+vagrant package --output ruby-mysql-demo.box
+vagrant box add ruby-mysql-demo ./ruby-mysql-demo.box
+                        </code></pre>
+                        <ul>
+                            <li class='fragment'>Its ready for use in another project's Vagrantfile</li>
+                        </ul>
+                        <pre class='fragment'><code data-trim class='ruby'>
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "ruby-mysql-demo"
+  config.vm.box_url = 'http://www.example.com/ruby-mysql-demo.box'
+end
+                        </code></pre>
+                    </section>
+
+                    <section data-transition='linear'>
+                        <h2>Packaging a Box</h2>
+                        <ul>
+                            <li class='fragment'>By default the box is more or less a disk image with the software you want installed</li>
+                            <li class='fragment'>Configuration of the VM is the responsibility of the new Vagrantfile</li>
+                            <li class='fragment'>We can include optional defaults for VMs created with our box</li>
+                        </ul>
+                        <pre class='fragment'><code data-trim class='ruby'>
+# Vagrantfile.pkg
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.host_name = "ruby-dev-box"
+  config.vm.forward_port 3306, 3307   # mysql
+end
+                        </code></pre>
+                        <pre class='fragment'><code data-trim class='bash'>
+vagrant package --output ruby-mysql-demo.box \
+                --vagrantfile Vagrantfile.pkg
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Welcome to the Team</h2>
+                        <h3>Press to Start</h3>
+                        <img src='img/big-red-button.jpg' />
+                    </section>
+
+                </section>
+
+                <section>
+
+                    <section>
+                        <h2>Vagrant on Windows</h2>
+                        <ul>
+                            <li class='fragment'>Vagrant command is available via Powershell</li>
+                            <li class='fragment'>Vagrant creates keypairs for each VM, allowing you to use Putty to SSH into hosts</li>
+                            <li class='fragment'>You can also turn off headless mode</li>
+                        </ul>
+                        <pre class='fragment'><code data-trim class='ruby'>
+config.vm.provider :virtualbox do |vb|
+    vb.gui = true
+end
+                        </code></pre>
+                        <ul>
+                            <li class='fragment'>It's not ideal</li>
+                            <li class='fragment'>Always use git on the host machine; you'll need a client:
+                                <ul>
+                                    <li><a href='http://windows.github.com'>GitHub for Windows</a></li>
+                                    <li><a href='http://www.sourcetreeapp.com'>Sourcetree</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </section>
+
+                </section>
+
+                <section>
+                    <h2>Thanks for listening</h2>
+                    <img src='img/shipment.jpg' />
+                    <p>Slides and examples are available online <a href='https://github.com/brrygrdn/an-intro-to-vagrant'>https://github.com/brrygrdn/an-intro-to-vagrant</a></p>
+                </section>
+
+            </div><!-- end-of-slides -->
+
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
+
+        <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: false,
+                history: true,
+                center: false,
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+
+    </body>
 </html>
