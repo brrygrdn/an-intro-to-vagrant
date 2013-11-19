@@ -44,10 +44,19 @@
                 </section>
 
                 <section>
-                    <h2>About me</h2>
-                    <h3><strike>Professional Vagrant</strike></h3>
-                    <h3>Contract Developer</h3>
-                    <img src='img/hulk-ending.jpg' />
+                    <section>
+                        <h2>Virtualisation</h2>
+                        <p>Virtualisation is ubiqious in production</p>
+                        <img style='border: none; box-shadow: none;' src='img/aws-logo.png' />
+                        <img style='border: none; box-shadow: none;' src='img/heroku-logo.png' /> <br />
+                        <img style='border: none; box-shadow: none;' src='img/engineyard-logo.png' />
+                    </section>
+                    <section>
+                        <h2>Virtualisation</h2>
+                        <p>The shape of data centers has changed</p>
+                        <img style='border: none; box-shadow: none;' src='img/cloud.jpg' />
+                        <h3  class='fragment'>A common metaphor is 'Pets vs Cattle'</h3>
+                    </section>
                 </section>
 
                 <section>
@@ -63,12 +72,12 @@
                             <li class='fragment'>You think he's annoying</li>
                             <li class='fragment'>I will tolerate his quirks</li>
                             <li class='fragment'>You won't</li>
-                            <li class='fragment'>I will rush to treat health problems</li>
-                            <li class='fragment'>You're only sympathetic because you probably have a pet too</li>
+                            <li class='fragment'>I will nurse him back to health if he is ill</li>
                             <li class='fragment'>Replacing him is A Big Deal as he's unique</li>
+                            <li class='fragment'>He scales up</li>
                         </ul>
                         <br /><br />
-                        <h3 class='fragment'>Basically, they're subjective and precious</h3>
+                        <h3 class='fragment'>They are subjective and precious.</h3>
                     </section>
                 </section>
 
@@ -82,24 +91,18 @@
                         <h2>Of Clouds and Cattle</h2>
                         <ul>
                             <li class='fragment'>They are many</li>
-                            <li class='fragment'>They each fulfill a single purpose</li>
                             <li class='fragment'>They are homogenous</li>
+                            <li class='fragment'>They tend to provide a collective purpose</li>
                             <li class='fragment'>If they get ill, we replace them</li>
                             <li class='fragment'>They're easily reproduced</li>
+                            <li class='fragment'>They scale out</li>
                         </ul>
-                    </section>
-
-                    <section data-transition='linear'>
-                        <h2>Of Clouds and Cattle</h2>
-                        <p>Virtualisation is ubiqious in production</p>
-                        <img style='border: none; box-shadow: none;' src='img/aws-logo.png' />
-                        <img style='border: none; box-shadow: none;' src='img/heroku-logo.png' /> <br />
-                        <img style='border: none; box-shadow: none;' src='img/engineyard-logo.png' />
+                        <br /><br />
+                        <h3 class='fragment'>The are immutable and short lived.</h3>
                     </section>
                 </section>
 
                 <section>
-
                     <section data-transition='linear'>
                         <h3>The Precarious Life of a Dev Box</h3>
                         <img src='img/pet-bacon.png' />
@@ -107,19 +110,27 @@
 
                     <section data-transition='linear'>
                         <h3>The Precarious Life of a Dev Box</h3>
-                        <h4>Its a pet because it supports your workflow and provides your digital identity</h4>
-                        <h4>Its cattle because it houses working copies of one or more projects which must be reproducible</h4>
+                        <ul>
+                            <li class='fragment'>It supports your workflow</li>
+                            <li class='fragment'>It provides your digital identity</li>
+                            <li class='fragment'>It provides dependancies to the projects you work on</li>
+                            <li class='fragment'>Parts of its configuration must be common to the team</li>
+                        </ul>
+                        <br /><br />
                     </section>
 
                     <section data-transition='linear'>
                         <h3>The Precarious Life of a Dev Box</h3>
-                        <p>As Ruby developers, we have it pretty good:</p>
+                        <p >As Ruby developers, we have it pretty good:</p>
                         <ul>
                             <li class='fragment'>We like to use Macs</li>
                             <li class='fragment'>We have good package managers</li>
                             <li class='fragment'>RVM and rubyenv allow us to pin Ruby versions per project</li>
                             <li class='fragment'>Bundler and RVM gemsets allow us to silo gem versions per project</li>
                         </ul>
+                    </section>
+
+                    <section data-transition='linear'>
                         <p class='fragment'>But...</p>
                         <ul>
                             <li class='fragment'>Windows happens</li>
@@ -129,7 +140,6 @@
                         <br /><br />
                         <h4 class='fragment'>Also, other toolchains don't have it so good</h4>
                     </section>
-
                 </section>
 
                 <section>
@@ -191,12 +201,12 @@ Bringing machine 'default' up with 'virtualbox' provider...
 [default] Importing base box 'precise32'...
                         </code></pre>
 
-                        <p class='fragment'>Rebuilding is a lot faster because of Boxes</p>
+                        <h4 class='fragment'>Rebuilding is a lot faster because of Boxes</h4>
                     </section>
 
                     <section data-transition='linear'>
                         <h3>Getting Started: Boxes</h3>
-                        <p>What boxes are installed?</p>
+                        <p>Which boxes are installed?</p>
                         <pre><code data-trim class='bash'>
 $ vagrant box list
 precise32 (virtualbox)
@@ -278,61 +288,6 @@ $ vagrant up
 
                 <section>
 
-                    <section>
-                        <h3>Example: Multiple Hosts</h3>
-
-                        <p class='fragment'>Vagrantfile</p>
-                        <pre class='fragment'><code data-trim class='ruby'>
-VAGRANTFILE_API_VERSION = "2"
-
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "precise64"
-  config.vm.box_url = 'http://files.vagrantup.com/precise64.box'
-  config.vm.provision :shell, :path => "bootstrap.sh"
-
-  config.vm.define :outer do |web|
-    config.vm.network :private_network, ip: "192.168.128.5"
-  end
-
-  config.vm.define :inner do |db|
-    config.vm.network :private_network, ip: "192.168.128.10"
-  end
-end
-                        </code></pre>
-                        <p class='fragment'>index.html</p>
-                        <pre class='fragment'><code data-trim class='html'>
-<h1>Hello from the Outer VM</h1>
-<iframe width='100%' src="http://192.168.128.10/index-2.html"></iframe>
-                        </code></pre>
-                        <p class='fragment'>index-2.html</p>
-                        <pre class='fragment'><code data-trim class='html'>
-<h1>Hello from the Inner VM</h1>
-                        </code></pre>
-                    </section>
-
-                    <section data-transition='linear'>
-                        <h3>Example: Multiple Hosts</h3>
-                        <pre><code data-trim class='bash'>
-$ vagrant up
-                        </code></pre>
-                        <p> or </p>
-                        <pre><code data-trim class='bash'>
-$ vagrant up outer
-$ vagrant up inner
-                        </code></pre>
-                        <p class='fragment'>Visit http://192.168.128.5/</p>
-                        <img class='fragment' src='img/multi-hello-world.png' />
-                    </section>
-
-                    <section>
-                        <h2>Development == Production</h2>
-                        <img src='img/hr-architecture.jpg' />
-                    </section>
-
-                </section>
-
-                <section>
-
                     <section data-transition='linear'>
                         <h3>Example: Provisioning with Chef</h3>
                         <p>Why should you use Chef?</p>
@@ -358,12 +313,9 @@ $ librarian-chef init
                         <pre class='fragment'><code data-trim class='ruby'>
 #!/usr/bin/env ruby
 #^syntax detection
-
 site 'http://community.opscode.com/api/v1'
-
 cookbook 'apt'
 cookbook 'build-essential'
-
 cookbook 'rvm',
   :git => 'https://github.com/fnichol/chef-rvm'
                         </code></pre>
@@ -375,9 +327,6 @@ Installing build-essential (1.4.2)
 Installing chef_gem (0.1.0)
 Installing rvm (0.9.1)
                         </code></pre>
-
-                        <p class='fragment'>Remember to add 'cookbooks/'' to .gitignore</p>
-                        <h4 class='fragment'>Note: You should probably look at berkshelf instead</h4>
 
                     </section>
 
@@ -442,10 +391,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :shell,
     :inline => "cd /vagrant && bundle install"
 end
-
-
-
-
                         </code></pre>
                     </section>
 
@@ -483,8 +428,10 @@ vagrant@precise64:/vagrant$ rackup
 +       allow_remote_root:      true,
 +       remove_test_database:   true
 +     }
-
                         </code></pre>
+                    </section>
+
+                    <section>
                         <p class='fragment'>We don't need to rebuild</p>
                         <pre class='fragment'><code data-trim class='ruby'>
 $ vagrant provision
@@ -493,6 +440,51 @@ $ vagrant provision
                         <pre class='fragment'><code data-trim class='ruby'>
 $ vagrant provision --provision-with chef_solo
                         </code></pre>
+                    </section>
+
+                </section>
+
+                <section>
+
+                    <section>
+                        <h3>Example: Multiple Hosts</h3>
+
+                        <p class='fragment'>Vagrantfile</p>
+                        <pre class='fragment'><code data-trim class='ruby'>
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "precise64"
+  config.vm.box_url = 'http://files.vagrantup.com/precise64.box'
+  config.vm.provision :shell, :path => "bootstrap.sh"
+
+  config.vm.define :app do |web|
+    config.vm.network :private_network, ip: "192.168.128.5"
+    # provisioning steps for app
+  end
+
+  config.vm.define :db do |db|
+    config.vm.network :private_network, ip: "192.168.128.10"
+    # provisoning steps for db
+  end
+end
+                        </code></pre>
+                    </section>
+
+                    <section data-transition='linear'>
+                        <h3>Example: Multiple Hosts</h3>
+                        <pre><code data-trim class='bash'>
+$ vagrant up
+                        </code></pre>
+                        <p> or </p>
+                        <pre><code data-trim class='bash'>
+$ vagrant up app
+$ vagrant up db
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Development == Production</h2>
+                        <img src='img/hr-architecture.jpg' />
                     </section>
 
                 </section>
@@ -563,15 +555,7 @@ config.vm.provider :virtualbox do |vb|
     vb.gui = true
 end
                         </code></pre>
-                        <ul>
-                            <li class='fragment'>It's not ideal</li>
-                            <li class='fragment'>Always use git on the host machine; you'll need a client:
-                                <ul>
-                                    <li><a href='http://windows.github.com'>GitHub for Windows</a></li>
-                                    <li><a href='http://www.sourcetreeapp.com'>Sourcetree</a></li>
-                                </ul>
-                            </li>
-                        </ul>
+                        <h4 class='fragment'>It's not ideal, stop using windows</h4>
                     </section>
 
                 </section>
